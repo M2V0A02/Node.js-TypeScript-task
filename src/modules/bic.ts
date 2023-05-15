@@ -1,14 +1,19 @@
+import BICDirectoryEntryType, {AccountsType} from "../types/BICDirectoryEntryType.js";
+import BICAccountsType from "../types/BICAccountsType.js";
+import BICRequiredDataType from "../types/BICRequiredDataType.js";
 import fetch, { Response } from "node-fetch";
 import AdmZip from "adm-zip";
 import xml2js from "xml2js";
 import iconv from "iconv-lite";
-import BICDirectoryEntryType, {AccountsType} from "../types/BicDirectoryEntryType.js";
-import BICAccountsType from "../types/BicAccountsType.js";
-import BICRequiredDataType from "../types/BicRequiredDataType.js";
 
 export default async (url: string): Promise<BICRequiredDataType[]> => {
-  const response: Response = await fetch(url);
-  const buffer: ArrayBuffer = await response.arrayBuffer();
+  let buffer:ArrayBuffer;
+  try {
+    const response: Response = await fetch(url);
+    buffer = await response.arrayBuffer();
+  } catch(error: any) {
+    throw error;
+  }
   const outputBICS: BICRequiredDataType[] = [];
   const zip = new AdmZip(Buffer.from(buffer));
   const xmlBICS = iconv.decode(zip.getEntries()[0].getData(), "windows-1251");
