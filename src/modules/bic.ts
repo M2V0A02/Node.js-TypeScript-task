@@ -11,8 +11,8 @@ export default async (url: string): Promise<BICRequiredDataType[]> => {
   try {
     const response: Response = await fetch(url);
     buffer = await response.arrayBuffer();
-  } catch(error: any) {
-    throw error;
+  } catch(err: any) {
+    throw err;
   }
   const outputBICS: BICRequiredDataType[] = [];
   const zip = new AdmZip(Buffer.from(buffer));
@@ -20,7 +20,7 @@ export default async (url: string): Promise<BICRequiredDataType[]> => {
   const parser = new xml2js.Parser();
   parser.parseString(xmlBICS, (err: Error | null, result: any) => {
     if (err) {
-      console.error(err);
+      throw err;
     } else {
       const BICSDirectoryEntry = result[Object.keys(result)[0]].BICDirectoryEntry;
       BICSDirectoryEntry.forEach((BICDirectoryEntry: BICDirectoryEntryType) => {
