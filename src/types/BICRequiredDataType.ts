@@ -1,4 +1,4 @@
-import BICAccountsType from "./BicAccountsType.js"
+import BICAccountsType from "./BICAccountsType.js"
 
 export default interface BICRequiredDataType {
     bic: number,
